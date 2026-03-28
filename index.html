@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Research Proposals - Expanded Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0f172a;
+        overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .carousel-container {
+        position: relative;
+        width: 100%;
+        height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .card {
+        position: absolute;
+        width: 95%;
+        max-width: 450px;
+        height: 90dvh;
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        transition:
+          transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+          opacity 0.4s ease;
+        opacity: 0;
+        transform: translateX(100%) scale(0.95);
+        pointer-events: none;
+      }
+      .card-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        padding-bottom: 3rem;
+      }
+      .card-content::-webkit-scrollbar {
+        width: 6px;
+      }
+      .card-content::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .card-content::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+      }
+      .card.active {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        pointer-events: auto;
+        z-index: 10;
+      }
+      .card.prev {
+        opacity: 0;
+        transform: translateX(-100%) scale(0.95);
+        z-index: 5;
+      }
+      .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        z-index: 20;
+        backdrop-filter: blur(4px);
+        transition: background 0.2s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      }
+      .nav-btn:active {
+        background: rgba(59, 130, 246, 0.8);
+      }
+      .nav-prev {
+        left: 0.5rem;
+      }
+      .nav-next {
+        right: 0.5rem;
+      }
+      .progress-dots {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+        z-index: 20;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s;
+      }
+      .dot.active {
+        background: #3b82f6;
+        transform: scale(1.5);
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="carousel-container" id="carousel">
+      <button class="nav-btn nav-prev" onclick="move(-1)">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="nav-btn nav-next" onclick="move(1)">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div
+        id="cards-wrapper"
+        class="w-full h-full flex items-center justify-center relative"
+      ></div>
+      <div class="progress-dots" id="dots-container"></div>
+    </div>
+
+    <script>
+      const topics = [
+        {
+          category: "Mutual Funds - Topic 1",
+          title:
+            "End-to-End Portfolio Optimization Maximizing the Sharpe Ratio",
+          abstract:
+            "Neural networks are leveraged to facilitate a direct mapping of historical and high-frequency market data onto optimal allocation weights. This bypasses expected returns forecasting, utilizing a specialized loss function engineered to minimize the negative Sharpe ratio.",
+          methodology:
+            "Requires dynamic adaptation to non-stationary market environments. Strategies include rolling-window retraining or online learning through stochastic gradient descent (SGD) to facilitate incremental updates. Advanced meta-learning or Proximal Policy Optimization (PPO) adjusts agent policies based on iterative reward feedback.",
+          feasibility: {
+            pros: "Directly addresses the known 'error maximization' flaw in traditional Markowitz models. High-demand, highly cited niche.",
+            cons: "Severe data requirements for dynamic updating. The 'Black Box' interpretability issue makes explaining allocation weights difficult. Implementing custom loss functions is notoriously difficult to debug and stabilize.",
+          },
+          links: [
+            {
+              name: "Portfolio Transformer",
+              url: "https://www.researchgate.net/publication/361161400",
+            },
+            {
+              name: "Incremental RL for Optimization",
+              url: "https://www.researchgate.net/publication/392961210",
+            },
+            {
+              name: "DL Financial Time Series Benchmark",
+              url: "https://arxiv.org/html/2603.01820v1",
+            },
+          ],
+        },
+        {
+          category: "Mutual Funds - Topic 2",
+          title: "Detecting 'Style Drift' using Deep Autoencoders & DBSCAN",
+          abstract:
+            "Fund managers frequently deviate from stated investment mandates to chase higher returns, a phenomenon known as style drift. Traditional linear regressions fail to capture real-time, hidden risk exposures.",
+          methodology:
+            "Deep Autoencoders are utilized to compress high-dimensional, complex daily return data into a dense mathematical latent space. DBSCAN density-based clustering is applied to organically group funds based on empirical behavioral similarities rather than marketing designations. This mathematically flags trajectory divergence.",
+          feasibility: {
+            pros: "Directly addresses the illusion of diversification, making it highly applicable to institutional risk officers. Moves beyond lagging regressions.",
+            cons: "Severe data requirements for deep autoencoders. High technical complexity: tuning DBSCAN hyperparameters (epsilon and minPts) on high-dimensional data is notoriously difficult to stabilize.",
+          },
+          links: [
+            {
+              name: "GPIF Cybernetic Whale Report",
+              url: "https://www.gpif.go.jp/en/investment/ai_interim_report_en.pdf",
+            },
+            {
+              name: "Clustering in Financial Markets",
+              url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5587353",
+            },
+            {
+              name: "Autoencoders for Financial Time-Series",
+              url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9245389/",
+            },
+          ],
+        },
+        {
+          category: "Mutual Funds - Topic 3",
+          title: "Forecasting Risk-Adjusted Performance via LSTM-Attention",
+          abstract:
+            "Traditional statistical forecasting models, such as ARIMA, frequently fail to capture non-linear market dynamics and volatility clustering during macroeconomic regime shifts. This model forecasts a fund's forward-looking Sharpe ratio directly.",
+          methodology:
+            "Utilizes Long Short-Term Memory (LSTM) networks specifically architected for complex time-series data. Integrating an Attention Mechanism allows the model to dynamically learn to assign heavier mathematical weights to specific past macroeconomic events or market shocks predictive of future behavior.",
+          feasibility: {
+            pros: "Aligns with institutional mandates for downside protection. Highly quantifiable performance allows rigorous backtesting against ARIMA.",
+            cons: "RNNs are highly prone to capturing market noise, leading to severe overfitting where the model memorizes past anomalies rather than true patterns.",
+          },
+          links: [
+            {
+              name: "Temporal Attention-Augmented Network",
+              url: "https://arxiv.org/pdf/1712.00975",
+            },
+            {
+              name: "Deep Learning for Asset Pricing",
+              url: "https://arxiv.org/pdf/2307.13570",
+            },
+          ],
+        },
+        {
+          category: "Parametric Insurance - Topic 1",
+          title: "Using ML to Design Better Parametric Triggers",
+          abstract:
+            "The fundamental problem is basis risk: the policy pays out when no loss has occurred, or a genuine loss goes uncompensated. Currently, triggers are selected through actuarial convention rather than empirical evidence.",
+          methodology:
+            "Train a gradient boosting model (XGBoost) on historical hazard data paired with loss records. Gradient boosting loss function minimisation utilizes a custom composite basis risk objective replacing standard mean squared error. Feature importance is derived via SHAP values.",
+          feasibility: {
+            pros: "All required data (NASA CHIRPS, NOAA, EM-DAT) is freely accessible. Fully implementable in Python using sklearn and XGBoost within a dissertation timeline.",
+            cons: "Requires rethinking how products are designed from scratch, which the industry has historically avoided.",
+          },
+          links: [
+            {
+              name: "Managing Basis Risks (2025)",
+              url: "https://link.springer.com/article/10.1057/s41288-025-00360-5",
+            },
+            {
+              name: "Minimizing Basis Risk in Tsunami Insurance",
+              url: "https://www.nature.com/articles/s44304-025-00127-x",
+            },
+            {
+              name: "XGBoost Reference",
+              url: "https://arxiv.org/abs/1603.02754",
+            },
+          ],
+        },
+        {
+          category: "Parametric Insurance - Topic 2",
+          title: "Building Satellite Flood Indices in Data-Scarce Regions",
+          abstract:
+            "In developing regions where parametric insurance is needed most, ground station infrastructure is often absent. We propose constructing a flood index entirely from satellite imagery, mapping engineered features to observed losses via ML.",
+          methodology:
+            "Spatial feature engineering derives flood extent from SAR backscatter thresholding intersected with digital elevation models. Random Forest and XGBoost regress satellite features to loss proxies, validated using spatial cross-validation to prevent data leakage.",
+          feasibility: {
+            pros: "Google Earth Engine provides free academic access (Sentinel-1 SAR, MODIS). Direct relevance to multilateral development banks operating across Asia and Africa.",
+            cons: "Requires rigorous spatial cross-validation and accurate computation of basis risk ratio, hit rate, and false positive rates.",
+          },
+          links: [
+            {
+              name: "FSI-IAIS Insights on Parametric Insurance",
+              url: "https://www.iais.org/uploads/2024/12/FSI-IAIS-Insights-on-parametric-insurance.pdf",
+            },
+            {
+              name: "Open-Source Natural Hazard Framework",
+              url: "https://link.springer.com/article/10.1007/s10669-023-09934-x",
+            },
+            {
+              name: "Random Forests for Yield Predictions",
+              url: "https://www.sciencedirect.com/science/article/pii/S0034425715302650",
+            },
+          ],
+        },
+        {
+          category: "Reinsurance - Topic 1",
+          title: "Can ML Replace Expensive Proprietary CAT Models?",
+          abstract:
+            "Catastrophe reinsurance treaties are priced using proprietary vendor models (RMS, AIR) that are prohibitively expensive for emerging-market insurers. We test if open ML models trained on public data can produce pricing close to industry benchmarks.",
+          methodology:
+            "Train XGBoost and Random Forest regression models to predict event loss ratios from physical hazard parameters including intensity, track, footprint, and GDP exposure overlap. Empirical loss distributions are constructed via bootstrapping, fitted to Pareto and Lognormal distributions. Layer pricing uses the Wang transform.",
+          feasibility: {
+            pros: "Benchmarking against published Swiss Re sigma figures gives a clear verifiable empirical structure. Directly addresses a massive academic literature gap regarding heavy-tailed reinsurance losses.",
+            cons: "Machine learning models trained on open data will not perfectly replicate proprietary CAT models.",
+          },
+          links: [
+            {
+              name: "Indexing the Future (CAS 2025)",
+              url: "https://ar.casact.org/indexing-the-future-the-rise-of-parametric-insurance-and-its-expanding-ecosystem/",
+            },
+            {
+              name: "Deep Learning for Financial Time Series",
+              url: "https://arxiv.org/html/2603.01820v1",
+            },
+          ],
+        },
+        {
+          category: "Reinsurance - Topic 2",
+          title: "Predicting Rare Events Using Imbalanced Learning",
+          abstract:
+            "Excess-of-loss reinsurance claims are rare by design; the majority of treaty years record no loss. This produces a severe class imbalance problem that standard actuarial frequency models handle poorly.",
+          methodology:
+            "Transfers methods from fraud detection: SMOTE oversampling synthetically rebalances the rare-event dataset, combined with cost-sensitive class weighting in the XGBoost objective function. A two-stage pipeline performs binary classification of a treaty trigger followed by conditional severity regression.",
+          feasibility: {
+            pros: "A simulation study using the 'actuary' package in R is fully academically defensible when proprietary data is unavailable. The GLM baseline comparison is immediately legible to actuarial examiners.",
+            cons: "Requires careful propagation of compounding uncertainty via Monte Carlo simulation between the classification and severity stages.",
+          },
+          links: [
+            { name: "SMOTE Reference", url: "https://arxiv.org/abs/1106.1813" },
+            {
+              name: "DL for Asset Pricing (Baseline Framework)",
+              url: "https://arxiv.org/pdf/2307.13570",
+            },
+            {
+              name: "Basis Risk in Parametric Insurance (PwC)",
+              url: "https://www.pwc.ch/en/publications/2024/Basis_risk_in_parametric_insurance_challenges_and_mitigation_strategies.pdf",
+            },
+          ],
+        },
+      ];
+
+      let currentIndex = 0;
+      const wrapper = document.getElementById("cards-wrapper");
+      const dotsContainer = document.getElementById("dots-container");
+
+      function generateLinks(links) {
+        if (!links || links.length === 0) return "";
+        let html = `<div class="mt-4 pt-4 border-t border-white/10"><h3 class="text-xs font-semibold text-blue-300 uppercase tracking-widest mb-3"><i class="fas fa-link mr-2"></i>Source References</h3><ul class="space-y-2">`;
+        links.forEach((link) => {
+          html += `<li><a href="${link.url}" target="_blank" class="text-sm text-slate-300 hover:text-white hover:underline truncate block"><i class="fas fa-external-link-alt text-[10px] mr-2 text-slate-500"></i>${link.name}</a></li>`;
+        });
+        html += `</ul></div>`;
+        return html;
+      }
+
+      topics.forEach((topic, index) => {
+        const card = document.createElement("div");
+        card.className = `card ${index === 0 ? "active" : ""}`;
+
+        card.innerHTML = `
+                <div class="card-content">
+                    <div class="mb-5">
+                        <span class="inline-block px-2 py-1 rounded bg-blue-500/20 text-[10px] font-bold text-blue-300 tracking-wider uppercase mb-3">${topic.category}</span>
+                        <h2 class="text-xl md:text-2xl font-bold text-white leading-snug">${topic.title}</h2>
+                    </div>
+                    
+                    <div class="mb-5 bg-white/5 border border-white/10 rounded-xl p-4">
+                        <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2"><i class="fas fa-align-left mr-2"></i>Abstract</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed">${topic.abstract}</p>
+                    </div>
+
+                    <div class="mb-5 bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+                        <h3 class="text-xs font-semibold text-purple-300 uppercase tracking-widest mb-2"><i class="fas fa-microscope mr-2"></i>Methodology & Tech Specs</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed">${topic.methodology}</p>
+                    </div>
+
+                    <div class="space-y-4 mb-2">
+                        <div class="border-l-2 border-emerald-500 pl-4 py-1">
+                            <h3 class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1"><i class="fas fa-check text-[10px] mr-1"></i> Advantages</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">${topic.feasibility.pros}</p>
+                        </div>
+                        <div class="border-l-2 border-rose-500 pl-4 py-1">
+                            <h3 class="text-xs font-semibold text-rose-400 uppercase tracking-widest mb-1"><i class="fas fa-xmark text-[10px] mr-1"></i> Challenges</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">${topic.feasibility.cons}</p>
+                        </div>
+                    </div>
+
+                    ${generateLinks(topic.links)}
+                </div>
+            `;
+        wrapper.appendChild(card);
+
+        const dot = document.createElement("div");
+        dot.className = `dot ${index === 0 ? "active" : ""}`;
+        dotsContainer.appendChild(dot);
+      });
+
+      const cards = document.querySelectorAll(".card");
+      const dots = document.querySelectorAll(".dot");
+
+      function move(direction) {
+        cards[currentIndex].classList.remove("active");
+        dots[currentIndex].classList.remove("active");
+
+        if (direction === 1) cards[currentIndex].classList.add("prev");
+        else cards[currentIndex].classList.remove("prev");
+
+        currentIndex =
+          (currentIndex + direction + topics.length) % topics.length;
+
+        cards.forEach((card, idx) => {
+          if (idx > currentIndex) card.classList.remove("prev");
+          if (idx < currentIndex) card.classList.add("prev");
+        });
+
+        cards[currentIndex].classList.remove("prev");
+        cards[currentIndex].classList.add("active");
+        dots[currentIndex].classList.add("active");
+
+        cards[currentIndex].querySelector(".card-content").scrollTop = 0;
+      }
+    </script>
+  </body>
+</html>
